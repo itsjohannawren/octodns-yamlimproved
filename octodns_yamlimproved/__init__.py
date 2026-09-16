@@ -12,7 +12,7 @@ from octodns.yaml import safe_load, safe_dump
 from octodns.provider.base import BaseProvider
 from octodns.provider import ProviderException
 
-__VERSION__ = '0.0.2'
+__VERSION__ = '0.0.3'
 
 class YamlProvider(BaseProvider):
     '''
@@ -211,11 +211,10 @@ class YamlProvider(BaseProvider):
 
         before = len(zone.records)
 
-        utf8_filename = join(self.directory, f'{zone.decoded_name}yaml')
         if self.file_name == "":
             utf8_filename, idna_filename = self.get_filenames(zone)
         else:
-            idna_filename = join(self.directory, f'{self.file_name}.yaml')
+            utf8_filename = idna_filename = join(self.directory, f'{self.file_name}.yaml')
 
         # we prefer utf8
         if isfile(utf8_filename):
