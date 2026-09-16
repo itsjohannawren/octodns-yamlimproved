@@ -35,8 +35,8 @@ description, long_description = descriptions()
 tests_require = ('pytest', 'pytest-cov', 'pytest-network')
 
 setup(
-    author='Julien Briault',
-    author_email='jbriault@deezer.com',
+    author='Johanna Walter, Julien Briault',
+    author_email='johanna@walter.fm, jbriault@deezer.com',
     description=description,
     extras_require={
         'dev': tests_require
@@ -57,6 +57,6 @@ setup(
     packages=find_packages(),
     python_requires='>=3.6',
     tests_require=tests_require,
-    url='https://github.com/junnhy5/octodns-yamlimproved',
+    url='https://github.com/itsjohannawren/octodns-yamlimproved',
     version=version(),
 )

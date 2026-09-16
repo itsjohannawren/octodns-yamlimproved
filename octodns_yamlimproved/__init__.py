@@ -12,7 +12,7 @@ from octodns.yaml import safe_load, safe_dump
 from octodns.provider.base import BaseProvider
 from octodns.provider import ProviderException
 
-__VERSION__ = '0.0.2'
+__VERSION__ = '0.0.3'
 
 class YamlProvider(BaseProvider):
     '''
@@ -211,11 +211,10 @@ class YamlProvider(BaseProvider):
 
         before = len(zone.records)
 
-        utf8_filename = join(self.directory, f'{zone.decoded_name}yaml')
         if self.file_name == "":
             utf8_filename, idna_filename = self.get_filenames(zone)
         else:
-            idna_filename = join(self.directory, f'{self.file_name}.yaml')
+            utf8_filename = idna_filename = join(self.directory, f'{self.file_name}.yaml')
 
         # we prefer utf8
         if isfile(utf8_filename):
@@ -224,13 +223,19 @@ class YamlProvider(BaseProvider):
                     f'Both UTF-8 "{utf8_filename}" and IDNA "{idna_filename}" exist for {zone.decoded_name}'
                 )
             filename = utf8_filename
-        else:
+        elif isfile(idna_filename):
             self.log.warning(
-                'populate: "%s" does not exist, falling back to try idna version "%s"',
+                'populate: "%s" does not exist, falling back to idna version "%s"',
                 utf8_filename,
                 idna_filename,
             )
             filename = idna_filename
+        else:
+            self.log.error(
+                'populate: "%s" and "%s" do not exist',
+                utf8_filename,
+                idna_filename,
+            )
         self._populate_from_file(filename, zone, lenient)
 
         self.log.info(
